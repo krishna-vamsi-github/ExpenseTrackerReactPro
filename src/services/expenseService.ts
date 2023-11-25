@@ -1,5 +1,3 @@
-import List from "../models/List";
-
 const expenseList = [
   {
     id: 1,
