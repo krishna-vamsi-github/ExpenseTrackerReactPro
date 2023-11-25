@@ -30,19 +30,36 @@ function App() {
     return () => controller.abort();
   }, []);
   const deleteItem = (id: number) => {
-    const originalArray = [...users];
+    const originalUsers = [...users];
     setUsers(users.filter((user) => user.id !== id));
     axios
-      .delete("https://jsonplaceholder.typicode.com/kusers" + "/" + id)
+      .delete("https://jsonplaceholder.typicode.com/users/" + id)
       .catch((err) => {
         setError(err.message);
-        setUsers(originalArray);
+        setUsers(originalUsers);
+      });
+  };
+  const addUser = () => {
+    const originalUsers = [...users];
+    const newUser = { id: 0, name: "Thala" };
+    setUsers([newUser, ...users]);
+    axios
+      .post("https://jsonplaceholder.typicode.com/users", newUser)
+      .then(({ data: savedData }) => {
+        console.log(savedData);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setUsers(originalUsers);
       });
   };
   return (
     <>
       {error && <p className="text-danger">{error}</p>}
       {isLoading && <div className="spinner-border"></div>}
+      <button className="btn btn-success mb-3" onClick={addUser}>
+        Add User
+      </button>
       <div className="list-group">
         {users.map((user) => (
           <li
